@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
+import Table from '../table/Table';
 
-import './MyUploadComponent.css'
+import './MyUploadComponent.css';
 
 export default function MyUploadComponent() {
 
@@ -14,33 +15,33 @@ export default function MyUploadComponent() {
       let fileReader = new FileReader();
       fileReader.readAsArrayBuffer(selectedFile);
       fileReader.onload=(e)=>{
-        setExcelFile(e.target.result)
+        const fileData = e.target.result;
+        setExcelFile(fileData);
+        handleFileSubmit(fileData);
       }
-
-    } else {
-      console.log('no file selected')  
     }
   };
-
-  const handleFileSubmit = (e) => {
-    e.preventDefault();
-    if(excelFile !== null){
-      const workbook = XLSX.read(excelFile, {type: 'buffer'});
+  
+  const handleFileSubmit = (fileData) => {
+    if(fileData !== null){
+      const workbook = XLSX.read(fileData, {type: 'buffer'});
       const workSheetName = workbook.SheetNames[0];
       const workSheet = workbook.Sheets[workSheetName];
       const data = XLSX.utils.sheet_to_json(workSheet);
       setExcelData(data);
+    }
   }
-}
+
+  
 
   return (
     <>
       <div className='upload_container'>        
-        <form onSubmit={handleFileSubmit}>
+        <form id='file_form' onSubmit={handleFileSubmit}>
           <input className='custom-file-input' type='file' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' required onChange={handleFile}/>
-          { excelFile ? <button className='upload_btn' type='submit'>upload</button> : null }
         </form>
       </div>
+      <Table excelData={excelData}/>
     </>
   );
 }
