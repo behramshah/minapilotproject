@@ -1,10 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
+import { createRoot } from 'react-dom/client';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import './index.css';
+import 'font-awesome/css/font-awesome.min.css';
+
+const container = document.getElementById('root');
+const root = createRoot(container);
 root.render(
   // <React.StrictMode>
     <App />
