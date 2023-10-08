@@ -1,4 +1,6 @@
 .upload_container{
+    width: clamp(200px, 40%, 400px);
+    display: inline-flex;
     padding: 20px;
 }
 
@@ -33,8 +35,9 @@
     background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
-.upload_btn {
-    width: 100px;
+.custom_btn {
+    width: fit-content;
+    width: -moz-fit-content;
     height: 30px;
     border-radius: 5px;
     border: 1px solid #0D6EFD;
@@ -45,12 +48,12 @@
     text-transform: uppercase;
 }
 
-.upload_btn:hover{
+.custom_btn:hover{
     border: 1px solid #fff;
     color: #fff;
     background-color: #0D6EFD;
 }
 
-.upload_btn:active{
+.custom_btn:active{
     transform: scale(0.9) translate(2%);
 }

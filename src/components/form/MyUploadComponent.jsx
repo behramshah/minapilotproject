@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import * as XLSX from 'xlsx';
 import Table from '../table/Table';
+import Modal from '../Modal/Modal';
 
 import './MyUploadComponent.css';
 
@@ -8,6 +9,7 @@ export default function MyUploadComponent() {
 
   const [excelFile, setExcelFile ] = useState(null);
   const [excelData, setExcelData] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   const handleFile = (e) => {
     let selectedFile = e.target.files[0];
@@ -31,8 +33,10 @@ export default function MyUploadComponent() {
       setExcelData(data);
     }
   }
-
   
+  const handleButtonClick = () => {
+    setShowModal(true);
+  };
 
   return (
     <>
@@ -40,7 +44,9 @@ export default function MyUploadComponent() {
         <form id='file_form' onSubmit={handleFileSubmit}>
           <input className='custom-file-input' type='file' accept='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' required onChange={handleFile}/>
         </form>
+        {excelData ? <button className='custom_btn' onClick={handleButtonClick}>Add New Data</button> : null}
       </div>
+      {showModal ? <Modal onClose={() => setShowModal(false)} /> : null}
       <Table excelData={excelData}/>
     </>
   );
