@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ReactTabulator } from 'react-tabulator';
 import DeleteIcon from './childcomponents/DeleteIcon';
+import EditIcon from './childcomponents/EditIcon';
 
 import 'react-tabulator/lib/styles.css';
 import 'react-tabulator/lib/css/tabulator.min.css';
@@ -19,17 +20,30 @@ export default function Table(props) {
         {title:'len',field:'len', headerFilter:true},
         {title:'wkt',field:'wkt', headerFilter:true},
         {title:'status',field:'status', headerFilter:true},
-        {title:'edit',field:'edit'},
-        {title:'Delete',field:'delete',
-         formatter: (cell, formatterParams, onRendered) => {
+        {
+          title:'Edit',field:'edit',
+          formatter: (cell, formatterParams, onRendered) => {
+            onRendered(()=>{
+              const onEdit = () => {
+                const rowData = cell.getRow().getData();
+                props.onEditData(rowData);
+              };
+              const root = createRoot(cell.getElement());
+              root.render(<EditIcon onEdit={onEdit} />);
+            });
+          }
+        },
+        {
+         title:'Delete',field:'delete',
+          formatter: (cell, formatterParams, onRendered) => {
             onRendered(() => {
               const onDelete = () => {
-                cell.getRow().delete();
-                console.log(`Row with id ${cell.getRow().getData().id} deleted.`);
+                const id = cell.getRow().getData().id;
+                props.onDeleteData(id);
               };
               const root = createRoot(cell.getElement());
               root.render(<DeleteIcon onDelete={onDelete} />);
-            });
+            });          
           }, 
         },
         {title:'show',field:'show'},

@@ -1,6 +1,6 @@
 .modal {
-    width: 500px;
-    height: 450px;
+    width: 400px;
+    height: 350px;
     border: 1px solid #0D6EFD;
     background-color: #fff;
     border-radius: 15px;
@@ -22,7 +22,15 @@
 }
 
 .custom_modal_form label {
+    width: 150px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
     margin-bottom: 20px;
+    font-weight: 700;
+    font-size: 10pt;
+    text-transform: uppercase;
 }
 
 .custom_modal_form input,
@@ -41,9 +49,16 @@
     background-color: rgba(0,0,0,0.5);
 }
 
+.modal_buttons_container {
+    width: 150px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .custom_btn {
-    width: fit-content;
     width: -moz-fit-content;
+    width: fit-content;
     height: 30px;
     border-radius: 5px;
     border: 1px solid #0D6EFD;
@@ -65,8 +80,8 @@
 }
 
 .custom_btn_secondary {
-    width: fit-content;
     width: -moz-fit-content;
+    width: fit-content;
     height: 30px;
     border-radius: 5px;
     border: 1px solid black;

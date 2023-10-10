@@ -2,16 +2,18 @@ import React, { useState } from 'react';
 
 import './Modal.css';
 
-export default function Modal({ onClose }) {
-  const [len, setLen] = useState('');
-  const [status, setStatus] = useState('');
+export default function Modal({ onClose, onSubmit, data }) {
+  const [len, setLen] = useState( data ? data.len : '');
+  const [status, setStatus] = useState(data ? data.status : '');
+  const [wkt, setWkt] = useState(data ? data.wkt : '');
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(`Len: ${len}, Status: ${status}`);
     onClose();
+    onSubmit({ len, status, wkt });
   };
-
+  
   return (
     <div className='modal'>
       <form className='custom_modal_form' onSubmit={handleSubmit}>

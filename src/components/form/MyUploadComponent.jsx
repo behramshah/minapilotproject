@@ -10,6 +10,14 @@ export default function MyUploadComponent() {
   const [excelFile, setExcelFile ] = useState(null);
   const [excelData, setExcelData] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [modalData, setModalData] = useState(null);
+  const [editId, setEditId] = useState(null)
+
+  const handleEditData = (data) => {
+    setEditId(data.id);
+    setModalData({ len: data.len, status: data.status, wkt: data.wkt });
+    setShowModal(true);
+  };  
 
   const handleFile = (e) => {
     let selectedFile = e.target.files[0];
@@ -38,6 +46,23 @@ export default function MyUploadComponent() {
     setShowModal(true);
   };
 
+  const handleNewData = (newData) => {
+    if(editId) {
+      const newRow = { id: editId, ...newData };
+      const newExceldata = excelData.filter((row) => row.id !== editId);
+      setExcelData([...newExceldata, newRow]);
+      setEditId(null);
+    } else {
+      const highestId = Math.max(...excelData.map((row) => row.id));
+      const newRow = { id: highestId + 1, ...newData };
+      setExcelData([...excelData, newRow]);
+    }
+  };    
+
+  const handleDeleteData = (id) => {
+    setExcelData(excelData.filter((row) => row.id !== id));
+  };  
+
   return (
     <>
       <div className='upload_container'>        
@@ -46,8 +71,8 @@ export default function MyUploadComponent() {
         </form>
         {excelData ? <button className='custom_btn' onClick={handleButtonClick}>Add New Data</button> : null}
       </div>
-      {showModal ? <Modal onClose={() => setShowModal(false)} /> : null}
-      <Table excelData={excelData}/>
+      <Table excelData={excelData} onEditData={handleEditData} onDeleteData={handleDeleteData}/>
+      {showModal ? <Modal data={modalData} onClose={() => { setShowModal(false); setModalData(null);}} onSubmit={handleNewData} /> : null}
     </>
   );
 }
