@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import Table from '../table/Table';
 import Modal from '../Modal/Modal';
-import PieChart from '../charts/PieChart';
+import PieChart from '../charts/piechart/PieChart';
+import VerticalChart from '../charts/verticalchart/VerticalChart';
 
 import './MyUploadComponent.css';
 
@@ -14,6 +15,7 @@ export default function MyUploadComponent() {
   const [modalData, setModalData] = useState(null);
   const [editId, setEditId] = useState(null);
   const [showPie, setShowPie] = useState(false);
+  const [showVertical, setShowVertical] = useState(false);
   const [chartdata, setChartData] = useState(null);
 
   useEffect(() => {
@@ -23,6 +25,10 @@ export default function MyUploadComponent() {
   const handleAnalizeOne = () => {
     setChartData(excelData);
     setShowPie(!showPie);
+  };
+
+  const handleAnalizeTwo = () => {
+    setShowVertical(!showVertical);
   };
 
   const handleEditData = (data) => {
@@ -76,6 +82,10 @@ export default function MyUploadComponent() {
     setExcelData(excelData.filter((row) => row.id !== id));
   };  
 
+  const handleShowMap = (wkt) => {
+    console.log(wkt);
+  }
+
   return (
     <>
       <div className='upload_container'>        
@@ -85,16 +95,17 @@ export default function MyUploadComponent() {
         {excelData ? <button className='custom_btn' onClick={handleButtonClick}>Add New Data</button> : null}
       </div>
       {showModal ? <Modal data={modalData} onClose={() => { setShowModal(false); setModalData(null);}} onSubmit={handleNewData} /> : null}
-      <Table excelData={excelData} onEditData={handleEditData} onDeleteData={handleDeleteData}/>
+      <Table excelData={excelData} onEditData={handleEditData} onDeleteData={handleDeleteData} onShowMap={handleShowMap}/>
       {
         excelData ? 
           <div className='analize_buttons_container'>
             <button className='custom_btn' onClick={handleAnalizeOne}>Analiz 1</button>
-            <button className='custom_btn'>Analiz 2</button>
+            <button className='custom_btn' onClick={handleAnalizeTwo}>Analiz 2</button>
           </div> : null
       }
       <div className='charts_container'>
         {showPie ? <PieChart excelData={chartdata}/> : null}      
+        {showVertical ? <VerticalChart excelData={chartdata}/> : null}      
       </div>
     </>
   );

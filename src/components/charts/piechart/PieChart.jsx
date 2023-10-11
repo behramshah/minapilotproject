@@ -21,7 +21,7 @@ export default function PieChart({excelData}) {
     if(countRow){
       statusZero = excelData.reduce((total, item) => item.status == 0 ? total + 1 : total, 0);
       statusOne = excelData.reduce((total, item) => item.status == 1 ? total + 1 : total, 0);
-      statusTwo = excelData.reduce((total, item) => item.status === 2 ? total + 1 : total, 0);
+      statusTwo = excelData.reduce((total, item) => item.status == 2 ? total + 1 : total, 0);
     }
 
     const labelStatusZero = `Status 0 (${((statusZero/countRow)*100).toFixed(2)}%)`;
@@ -45,6 +45,7 @@ export default function PieChart({excelData}) {
             'rgba(75, 192, 192, 1)',
           ],
           borderWidth: 1,
+          radius: '90%',
         },
       ],
     };

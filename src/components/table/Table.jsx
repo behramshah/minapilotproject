@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ReactTabulator } from 'react-tabulator';
 import DeleteIcon from './childcomponents/DeleteIcon';
 import EditIcon from './childcomponents/EditIcon';
+import ShowIcon from './childcomponents/ShowIcon';
 
 import 'react-tabulator/lib/styles.css';
 import 'react-tabulator/lib/css/tabulator.min.css';
@@ -46,7 +47,18 @@ export default function Table(props) {
             });          
           }, 
         },
-        {title:'show',field:'show'},
+        {title:'show',field:'show',
+          formatter: (cell, formatterParams, onRendered) => {
+            onRendered(() => {
+              const onShow = () => {
+                const wkt = cell.getRow().getData().wkt;
+                props.onShowMap(wkt);
+              };
+              const root = createRoot(cell.getElement());
+              root.render(<ShowIcon onShow={onShow}/>)
+            })
+          }
+      },
     ];
 
   return (
