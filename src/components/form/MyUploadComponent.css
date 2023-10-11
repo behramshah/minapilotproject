@@ -58,3 +58,11 @@
 .custom_btn:active{
     transform: scale(0.9) translate(2%);
 }
+
+.analize_buttons_container {
+    width: 250px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content:space-evenly;
+}

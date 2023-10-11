@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as XLSX from 'xlsx';
 import Table from '../table/Table';
 import Modal from '../Modal/Modal';
+import PieChart from '../charts/PieChart';
 
 import './MyUploadComponent.css';
 
@@ -11,7 +12,18 @@ export default function MyUploadComponent() {
   const [excelData, setExcelData] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modalData, setModalData] = useState(null);
-  const [editId, setEditId] = useState(null)
+  const [editId, setEditId] = useState(null);
+  const [showPie, setShowPie] = useState(false);
+  const [chartdata, setChartData] = useState(null);
+
+  useEffect(() => {
+    setChartData(excelData);
+  }, [excelData]);
+
+  const handleAnalizeOne = () => {
+    setChartData(excelData);
+    setShowPie(!showPie);
+  };
 
   const handleEditData = (data) => {
     setEditId(data.id);
@@ -44,7 +56,7 @@ export default function MyUploadComponent() {
   
   const handleButtonClick = () => {
     setShowModal(true);
-  };
+  };  
 
   const handleNewData = (newData) => {
     if(editId) {
@@ -55,9 +67,10 @@ export default function MyUploadComponent() {
     } else {
       const highestId = Math.max(...excelData.map((row) => row.id));
       const newRow = { id: highestId + 1, ...newData };
-      setExcelData([...excelData, newRow]);
+      setExcelData(prevExcelData => [...prevExcelData, newRow]);
     }
-  };    
+  };
+  
 
   const handleDeleteData = (id) => {
     setExcelData(excelData.filter((row) => row.id !== id));
@@ -71,8 +84,18 @@ export default function MyUploadComponent() {
         </form>
         {excelData ? <button className='custom_btn' onClick={handleButtonClick}>Add New Data</button> : null}
       </div>
-      <Table excelData={excelData} onEditData={handleEditData} onDeleteData={handleDeleteData}/>
       {showModal ? <Modal data={modalData} onClose={() => { setShowModal(false); setModalData(null);}} onSubmit={handleNewData} /> : null}
+      <Table excelData={excelData} onEditData={handleEditData} onDeleteData={handleDeleteData}/>
+      {
+        excelData ? 
+          <div className='analize_buttons_container'>
+            <button className='custom_btn' onClick={handleAnalizeOne}>Analiz 1</button>
+            <button className='custom_btn'>Analiz 2</button>
+          </div> : null
+      }
+      <div className='charts_container'>
+        {showPie ? <PieChart excelData={chartdata}/> : null}      
+      </div>
     </>
   );
 }
