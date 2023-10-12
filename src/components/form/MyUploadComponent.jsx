@@ -4,6 +4,7 @@ import Table from '../table/Table';
 import Modal from '../Modal/Modal';
 import PieChart from '../charts/piechart/PieChart';
 import VerticalChart from '../charts/verticalchart/VerticalChart';
+import FilterHeader from './childComponent/FilterHeader';
 
 import './MyUploadComponent.css';
 
@@ -17,6 +18,7 @@ export default function MyUploadComponent() {
   const [showPie, setShowPie] = useState(false);
   const [showVertical, setShowVertical] = useState(false);
   const [chartdata, setChartData] = useState(null);
+  const [originalData, setOriginalData] = useState(null);
 
   useEffect(() => {
     setChartData(excelData);
@@ -49,41 +51,78 @@ export default function MyUploadComponent() {
       }
     }
   };
-  
+
   const handleFileSubmit = (fileData) => {
     if(fileData !== null){
       const workbook = XLSX.read(fileData, {type: 'buffer'});
       const workSheetName = workbook.SheetNames[0];
       const workSheet = workbook.Sheets[workSheetName];
       const data = XLSX.utils.sheet_to_json(workSheet);
+      setOriginalData(data);
       setExcelData(data);
     }
   }
   
   const handleButtonClick = () => {
     setShowModal(true);
-  };  
+  }; 
 
   const handleNewData = (newData) => {
+    let newExceldata;
     if(editId) {
       const newRow = { id: editId, ...newData };
-      const newExceldata = excelData.filter((row) => row.id !== editId);
-      setExcelData([...newExceldata, newRow]);
+      newExceldata = excelData.filter((row) => row.id !== editId);
+      newExceldata = [...originalData, newRow];
+      setExcelData(newExceldata);
       setEditId(null);
     } else {
       const highestId = Math.max(...excelData.map((row) => row.id));
       const newRow = { id: highestId + 1, ...newData };
-      setExcelData(prevExcelData => [...prevExcelData, newRow]);
+      newExceldata = [...originalData, newRow];
+      setExcelData(newExceldata);
     }
+    setOriginalData(newExceldata);
+  };
+  
+  const handleDeleteData = (id) => {
+    const newExceldata = excelData.filter((row) => row.id !== id);
+    setExcelData(newExceldata);
+    setOriginalData(newExceldata);
   };
   
 
-  const handleDeleteData = (id) => {
-    setExcelData(excelData.filter((row) => row.id !== id));
-  };  
-
   const handleShowMap = (wkt) => {
     console.log(wkt);
+  }
+
+  const handleFilter = (e) => {
+    e.preventDefault();
+    if(originalData){
+      let filteredData = null;
+      switch(e.target.name){
+        case 'id':
+          filteredData = originalData.filter((item) => String(item.id).includes(String(e.target.value)));
+          setExcelData(filteredData);
+          break;
+      case 'len':
+        filteredData = originalData.filter((item) => String(item.len).includes(String(e.target.value)));
+        setExcelData(filteredData);
+        break;
+      case 'wkt':
+        filteredData = originalData.filter((item) => String(item.wkt).includes(String(e.target.value)));
+        setExcelData(filteredData);
+        break;
+      case 'status':
+        filteredData = originalData.filter((item) => String(item.status).includes(String(e.target.value)));
+        setExcelData(filteredData);
+        break;
+        default: console.log('No filters applied');
+      }
+    }
+  }
+
+  const cancelFilters = (e) => {
+    setExcelData(originalData);
   }
 
   return (
@@ -95,6 +134,7 @@ export default function MyUploadComponent() {
         {excelData ? <button className='custom_btn' onClick={handleButtonClick}>Add New Data</button> : null}
       </div>
       {showModal ? <Modal data={modalData} onClose={() => { setShowModal(false); setModalData(null);}} onSubmit={handleNewData} /> : null}
+      <FilterHeader handleFilter={handleFilter} cancelFilters={cancelFilters}/>
       <Table excelData={excelData} onEditData={handleEditData} onDeleteData={handleDeleteData} onShowMap={handleShowMap}/>
       {
         excelData ? 

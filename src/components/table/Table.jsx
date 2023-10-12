@@ -17,10 +17,10 @@ export default function Table(props) {
     }, [props.excelData]); 
 
     const columns = [
-        {title:'id', sorter:'number', field:'id', headerFilter:true},
-        {title:'len',field:'len', headerFilter:true},
-        {title:'wkt',field:'wkt', headerFilter:true},
-        {title:'status',field:'status', headerFilter:true},
+        {title:'id', sorter:'number', field:'id', headerFilter:false},
+        {title:'len',field:'len', headerFilter:false},
+        {title:'wkt',field:'wkt', headerFilter:false},
+        {title:'status',field:'status', headerFilter:false},
         {
           title:'Edit',field:'edit',
           formatter: (cell, formatterParams, onRendered) => {

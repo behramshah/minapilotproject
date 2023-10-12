@@ -1,0 +1,10 @@
+.filter_container {
+    height: 30px;
+    color: #555;
+    font-weight: 700;
+    background-color:#e6e6e6;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+}
