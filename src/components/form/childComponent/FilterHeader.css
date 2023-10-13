@@ -8,3 +8,7 @@
     align-items: center;
     justify-content: space-evenly;
 }
+
+.filter_label {
+    margin: 0 5px;
+}

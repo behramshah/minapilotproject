@@ -47,9 +47,9 @@ export default function VerticalChart({excelData}) {
     statusTwoLen = excelData.reduce((total, item) => item.status == 2 ? total + item.len : total, 0);
   }
 
-  const labelZero = `Status 0 total len is ${statusZeroLen.toFixed(2)}`;
-  const labelOne = `Status 1 total len is ${statusOneLen.toFixed(2)}`;
-  const labelTwo = `Status 2 total len is ${statusTwoLen.toFixed(2)}`;
+  const labelZero = `Status 0 total len is ${(+statusZeroLen).toFixed(2)}`;
+  const labelOne = `Status 1 total len is ${(+statusOneLen).toFixed(2)}`;
+  const labelTwo = `Status 2 total len is ${(+statusTwoLen).toFixed(2)}`;
   
   const labels = [labelZero, labelOne, labelTwo];
 

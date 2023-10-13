@@ -15,16 +15,16 @@ export default function FilterHeader({handleFilter, cancelFilters}) {
     <div className='filter_container'>
         <h4>Filter by</h4>
         <form ref={formRef}>
-            <label>
+            <label className='filter_label'>
                 id: <input type='text' name='id' onChange={handleFilter}/>
             </label>
-            <label>
+            <label className='filter_label'>
                 len: <input type='text' name='len' onChange={handleFilter}/>
             </label>
-            <label>
+            <label className='filter_label'>
                 wkt: <input type='text' name='wkt' onChange={handleFilter}/>
             </label>
-            <label>
+            <label className='filter_label'>
                 status: <input type='text' name='status' onChange={handleFilter}/>
             </label>
         </form>
